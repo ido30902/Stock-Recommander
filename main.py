@@ -9,40 +9,29 @@ def main():
 
 
     print("Starting the scan...")
-
-    symbol_list = convert_json_to_list()
     stocks_list = get_stocks_db()
 
 
-
-
-
-    update_last_stock("AA")
-    # Main loop -  limited to 499 daily
-    count = 0
-    newlist = []
-    last_stock = ""
-
-    for stock in symbol_list:
-        #if count == 100:
-            #break
-        count += 1
-        last_stock = stock["ACT Symbol"]    
-        
-
-        #newlist.append(stock)
-
-    #update_last_stock(last_stock)
-
-    #choose_stocks(newlist)
-
-    # Day sleep
-    #time.sleep(60 * 60 * 24)
+    
+    
+    
 
 
 
 
-def update_last_stock(symbol):
+def scan_50_stocks():
+    for stock in range(50):
+        print()
+
+
+def extract_symbols(list):
+    new_list = []
+    for symbol in list:
+        newlist.append(symbol["ACT Symbol"])
+    return new_list
+
+
+def set_last_stock(symbol):
     with open('stocks.json', 'w') as json_file:
         data = json.loads(json_file)
         data["last_stock"].update(symbol)
@@ -57,7 +46,7 @@ def create_stock_json_in_db(symbol):
         exists = False
         for stock in stocks:
             if symbol in stock["symbol"]:
-                exist = True
+                exists = True
         if not exists:
             print(f'Symbol added: {symbol}')
             new_obj = {"symbol": symbol, "PE": 0, "ROA": 0, "market_cap": 0}
@@ -70,7 +59,7 @@ def create_stock_json_in_db(symbol):
 # This function displays all the stocks in the list
 def display_stocks(stocks):
     for stock in stocks:
-        print(stock["ACT Symbol"])
+        print(stock["symbol"])
 
 #This function chooses the stocks based on the parameters given.
 def choose_stocks(stocks):
@@ -149,6 +138,15 @@ def update_db(stock_list):
 def get_stocks_db():
     with open('stocks.json') as json_file:
         return json.load(json_file)["stocks"]
+
+
+def get_symbols_from_raw_data():
+    with open('nyse_data.json') as json_file:
+        data = json.load(json_file)
+        new_list = []
+        for stock in data:
+            new_list.append(stock["ACT Symbol"])
+        return new_list
 
 #This function prints the border
 def print_border():
