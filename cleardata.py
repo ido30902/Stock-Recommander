@@ -1,7 +1,7 @@
 import json
 
 
-with open('data.json') as json_file:
+with open('nyse_data.json') as json_file:
     data = json.load(json_file)
 
     print(f'There are {len(data)} stocks in the list')
@@ -21,5 +21,5 @@ with open('data.json') as json_file:
 
     print(f'There are {len(data)} stocks in the list')
 
-with open('data.json', 'w') as json_file:
+with open('nyse_data.json', 'w') as json_file:
     json_file.write(json.dumps(data))
