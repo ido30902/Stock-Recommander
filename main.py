@@ -31,6 +31,7 @@ def main():
             # 500 daily limit
             if daily_stock_count == 499:
                 print('499')
+                daily_stock_count = 0
                 break
             
             # API limit - Every 14 seconds a new request is sent
@@ -132,12 +133,15 @@ def update_stock_data(symbol):
     if ('MarketCapitalization' in stock) and ('PERatio' in stock) and ('PERatio' in stock) and ('ReturnOnAssetsTTM' in stock):
         if (stock['MarketCapitalization'] == 'None') or (stock['PERatio'] == 'None') or (stock['ReturnOnAssetsTTM'] == 'None') or (stock['EPS'] == 'None'):
             return 0,0,0
-
+        
         market_cap = float(stock['MarketCapitalization'])
-        pe_ratio = float(stock['PERatio']) / float(stock['EPS'])
+        if float(stock['EPS']) != 0:
+            pe_ratio = float(stock['PERatio']) / float(stock['EPS'])
+        else:
+            pe_ratio = 0
         roa = float(stock['ReturnOnAssetsTTM'])
         print_border()        
-        print(f'Stock updated: {symbol} \nMarket Capitalization: {market_cap:,}$\nPE ratio: {pe_ratio}\nReturn on assets: {roa}')
+        print(f'Stock updated: {symbol} \nMarket Capitalization: {market_cap:,}$\nPE Ratio: { "{:.1f}".format(pe_ratio)  }\nReturn on Assets: {"{:.1%}".format(roa)}')
         return pe_ratio,roa,market_cap
     return 0, 0, 0
 
