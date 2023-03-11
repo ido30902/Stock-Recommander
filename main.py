@@ -7,6 +7,7 @@ import time
 def main():
 
 
+
     days_count = 0
 
     print("Starting the scan...")
@@ -22,9 +23,15 @@ def main():
         # Update stocks
         for index in stocks_list[last_stock_index(stocks_list):]:
 
+
             new_data = update_stock_data(index['symbol'])
             update_stock_db(index['symbol'],new_data[0],new_data[1],new_data[2])
             set_last_stock(index['symbol'])
+
+    
+    
+    
+
 
             daily_stock_count += 1
 
@@ -36,6 +43,7 @@ def main():
             
             # API limit - Every 14 seconds a new request is sent
             time.sleep(14)
+
 
         # Week check
         if days_count == 7:
@@ -50,17 +58,35 @@ def last_stock_index(stock_list):
         data =  json.load(json_file)
 
         symbol = data['last_stock']
+=======
+
+def scan_50_stocks():
+    for stock in range(50):
+        print()
+
 
         for i,stock in enumerate(stock_list):
             if stock['symbol'] == symbol:
                 return i
 
+def extract_symbols(list):
+    new_list = []
+    for symbol in list:
+        newlist.append(symbol["ACT Symbol"])
+    return new_list
 
 
 def set_last_stock(symbol):
+
     with open('util.json', 'w') as json_file:
         data = {"last_stock" : symbol}
         json_file.write(json.dumps(data))
+=======
+    with open('stocks.json', 'w') as json_file:
+        data = json.loads(json_file)
+        data["last_stock"].update(symbol)
+        json_file.write(data)
+
 
 def create_stock_json_in_db(symbol):
     with open('stocks.json') as json_file:
@@ -185,6 +211,15 @@ def get_name_by_symbol(symbol):
         for stock in data:
             if stock["ACT Symbol"] == symbol:
                 return stock["Company Name"]
+
+def get_symbols_from_raw_data():
+    with open('nyse_data.json') as json_file:
+        data = json.load(json_file)
+        new_list = []
+        for stock in data:
+            new_list.append(stock["ACT Symbol"])
+        return new_list
+
 
 def get_symbols_from_raw_data():
     with open('nyse_data.json') as json_file:
